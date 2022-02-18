@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- #
+from __future__ import unicode_literals
+import re
+import os
+from glob import glob
+from dateutil.parser import parse
+
+AUTHOR = 'Sander'
+SITENAME = 'Sander builds stuff'
+SECRET_KEY = ""  # change this
+HOOK_URL = '/secret'  # change this
+dev = os.getenv("USER") == "dsc"
+
+if dev:
+    SITEURL = 'http://localhost:8000/'
+else:
+    SITEURL = 'https://sanderf.nl/'
+
+PATH = 'content'
+STATIC_PATHS = ['downloads', 'images']
+TIMEZONE = 'Europe/Amsterdam'
+DEFAULT_LANG = 'en'
+DEFAULT_DATE_FORMAT = "%Y-%m-%d"
+
+# Feed generation is usually not desired when developing
+FEED_ALL_ATOM = None
+CATEGORY_FEED_ATOM = None
+TRANSLATION_FEED_ATOM = None
+AUTHOR_FEED_ATOM = None
+AUTHOR_FEED_RSS = None
+
+# Blogroll
+LINKS = (('My code', 'https://github.com/sanderfoobar/'),
+         ('My photos', 'https://pixelfed.social/sanderf'),
+         )
+
+# Social widget
+SOCIAL = (('You can add links in your config file', '#'),
+          ('Another social link', '#'),)
+
+DEFAULT_PAGINATION = 50
+
+
+def SUMMARY(article):
+    content = article.content
+    content = ' '.join(content.split(' ')[0:50])
+    for strip in ["<!--", "-->", "&lt;!--"]:
+        content = content.replace(strip, "")
+    content = content.replace("\n", "").replace("\r", "")
+    match = re.findall(r"(<blockquote>.*?</blockquote>)", content)
+
+    if not match:
+        content += "</blockquote>"
+        match = re.findall(r"(<blockquote>.*?</blockquote>)", content)
+
+    if not match or not match[0].strip():
+        raise Exception(f"Article \"{article.title}\" has no blockquote (chall description)")
+
+    match = match[0]
+    return match
+
+
+# Uncomment following line if you want document-relative URLs when developing
+#RELATIVE_URLS = True
+DISABLE_SEARCH = True
+DISPLAY_PAGES_ON_MENU = True
+
+THEME = 'themes/dino'
+PLUGIN_PATHS = []
+PLUGINS = []
+JINJA_ENVIRONMENT = {
+    "extensions": ["jinja2.ext.loopcontrols"]
+}
+
