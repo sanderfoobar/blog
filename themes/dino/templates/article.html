@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ SHORT_SITENAME }} - {{ article.title|striptags }}{% endblock %}
+{% block head %}
+  {{ super() }}
+  {% for keyword in article.keywords %}
+    <meta name="keywords" contents="{{keyword}}" />
+  {% endfor %}
+
+  {% for description in article.description %}
+    <meta name="description" contents="{{description}}" />
+  {% endfor %}
+
+  {% for tag in article.tags %}
+    <meta name="tags" contents="{{tag}}" />
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+<article class="article">
+  <header>
+    <div class="title">
+      <span>{{ article.title }}</span>
+      <span style="float:right;font-size:18px;color:grey;opacity:0.6">[{{article.locale_date}}]</span>
+    </div>
+    <div class="meta">
+      <a href="{{SITEURL}}/{{article.category.url}}">{{ article.category }}</a>
+      {% if article.tags %} -
+      <small>
+        {% for tag in article.tags %}
+          <span itemprop="keywords">
+            <a href="{{ SITEURL }}/{{ tag.url }}" rel="tag">{{ tag }}</a>
+          </span>
+        {% endfor %}
+      </small>
+      {% endif %}
+    </div>
+  </header>
+
+  {{ article.content }}
+
+  <h2>Comments</h2>
+
+  <textarea id="comment_box" placeholder="Spill your guts here..." class="body" name="text" rows="4" cols="60" style="resize:none;background-color: rgb(22, 22, 22) !important;border: 0;width:  100%;color: white;padding: 20px;font-size: 20px;font-family: monospace;"></textarea>
+
+  <div id="comment_submit_container">
+    <img src="/comments/captcha"/>
+    <input placeholder="captcha..." type="text" id="captcha" name="captcha">
+    <button id="comment_submit" type="button">Post my shit</button>
+  </div>
+
+    <div class="comments">
+    </div>
+</article>
+
+<script>
+  $(document).ready(() => {
+    let comment_box = $("#comment_box");
+    let comment_submit_container = $("#comment_submit_container");
+    let comment_captcha = $("#captcha");
+    let comments = $(".comments");
+
+    $('#comment_submit').on('click', () => {
+      let body = comment_box.val();
+      let captcha = comment_captcha.val();
+
+      let params = {
+        type: "POST",
+        contentType: "application/json",
+        url: '/comments/',
+        data: JSON.stringify({
+          body: body,
+          captcha: captcha
+        }),
+        dataType: "json"
+      };
+
+      $.ajax(params).done((data) => {
+        comment_box.val("");
+        comment_captcha.val("");
+        location.reload();
+      });
+    });
+
+    function try_enable_comment_submit(){
+      let val = comment_box.val();
+      if(val.length >= 1)
+        comment_submit_container.show();
+      else
+        comment_submit_container.hide();
+    }
+
+    comment_box.on('change keyup paste', () => {
+      try_enable_comment_submit();
+    });
+
+    // fetch comments
+    $(document).ready(() => {
+      $.getJSON("/comments/", function(data) {
+        let items = data['data'];
+        let html = "";
+        $.each(items, function(idx, val) {
+          html += `<code>${val.name}</code> ${val.comment} <i style="color:grey;">${val.date_added}</i><hr>`;
+        });
+        html = html.substring(0, html.length - 4);
+        comments.append(html);
+      });
+    });
+
+    // reset comment submit box container on page load
+    try_enable_comment_submit();
+  });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+  {{ super() }}
+{% endblock sidebar %}

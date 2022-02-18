@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ SHORT_SITENAME }} - {{ category|striptags }}{% endblock %}
+{% block content %}
+<article class="article">
+    <header>
+        <div class="title">
+            <span>Write-ups in "{{ category }}"</span>
+        </div>
+    </header>
+
+  <h2 class="uk-category-title uk-link-muted uk-meta" itemprop="name">Hello there</h2>
+  <ul class="uk-list uk-list-cats uk-list-striped">
+      <li>
+        <a class="uk-link-muted" href="{{ SITEURL }}/lol">kanker</a>
+      </li>
+  </ul>
+
+</article>
+{% endblock %}

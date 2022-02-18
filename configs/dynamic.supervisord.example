@@ -1,0 +1,13 @@
+[program:githook]
+directory=/home/blog/website
+command=/home/blog/website/venv/bin/python3 dynamic.py
+autostart=true
+autorestart=true
+startsecs=3
+stdout_logfile=/dev/null
+stderr_logfile=/dev/null
+user = blog
+environment=
+    HOME="/home/blog",
+    USER="blog",
+    PATH="/home/blog/website/venv/bin:%(ENV_PATH)s"

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% block content_title %}
+{% endblock %}
+
+{% for article in articles_page.object_list %}
+<article class="index">
+    {% include "article-header.html" %}
+</article>
+{% endfor %}
+
+{% include 'pagination.html' %}
+{% endblock content %}

@@ -1,0 +1,6 @@
+.idea/
+*.pyc
+output/
+venv/
+__pycache__
+pelicanconf.py

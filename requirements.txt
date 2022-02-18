@@ -1,0 +1,10 @@
+pelican[Markdown]
+requests
+python-dateutil
+hypercorn
+quart
+quart_session
+captcha
+flask
+typogrify
+peewee
