@@ -184,6 +184,7 @@ article>header div.description {
 
 article.index .description p {
     margin-top: 6px;
+    margin-bottom: 12px;
 }
 
 article>header .category {
@@ -221,9 +222,10 @@ article.article p>code {
 }
 
 article.article p, article.article ul, article.page p, article.page ul, article.article ol {
-    font-family: "pxplus_ibm_vga8regular";
+/*    font-family: "pxplus_ibm_vga8regular"; */
+    font-family: sans-serif;
     max-width: 98%;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 26px;
 }
 
